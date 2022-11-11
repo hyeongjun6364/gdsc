@@ -1,0 +1,46 @@
+class Solution {
+    vector<int>v;//1차원배열
+    void calling(vector<int>&f)//자기자신을 부모로 설정
+    {
+        v=f;
+        for(int i=0;i<v.size();i++)
+        {
+            v[i]=i;
+        }
+    }
+    int find(int x)//루트노드 찾음
+    {
+        if(v[x]==x)
+        {
+            return x;
+        }
+        return find(v[x]);
+    }
+    void unions(int x, int y)//노드끼리 합집합
+    {
+        int a = find(x);
+        int b = find(y);
+        if(a!=b)
+        {
+            v[b]=a;
+        }
+    }
+public:
+    bool validPath(int n, vector<vector<int>>& edges, int start, int end) {
+        //edges -> 이차원배열
+        vector<int>f(n,0);
+        calling(f);
+        for(int i=0;i<edges.size();i++)
+        {
+            if(find(edges[i][0])!=find(edges[i][1]))
+            {
+                unions(edges[i][0],edges[i][1]);
+            }
+        }
+        if(find(start)==find(end))
+        {
+            return true;
+        }
+        return false;
+    }
+};

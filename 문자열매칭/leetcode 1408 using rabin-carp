@@ -1,0 +1,140 @@
+//leetcode 1408 using rabin-carp
+class Solution {
+public:
+    vector<string> stringMatching(vector<string>& words) {
+        long long parenthash=0, patternhash=0, power=1;
+        int parentsize=0, patternsize=0;
+        int count[100];
+        string parent="";
+        string pattern="";
+        int befpatternhash=0;
+        int accumulate=0;
+        for (int i = 0; i < 100; i++) {
+        count[i] = 0;
+    }
+        vector<string> res;
+        for(int i=0; i<words.size()-1;i++){
+            for(int j=i+1;j<words.size();j++){
+                if(words[i].size()>words[j].size()){
+                    power=1;
+                    parent=words[i];
+                    pattern=words[j];
+                    parentsize=words[i].size();
+                    patternsize=words[j].size();
+                    parenthash = 0;
+                    patternhash = 0;
+                    for(int k=0; k<=parentsize-patternsize;k++){
+                        if(k==0){
+                            for(int q=0; q<patternsize;q++){
+                                parenthash+=parent[patternsize-1-q]*power;
+                                patternhash+=pattern[patternsize-1-q]*power;
+                                if(q<patternsize-1){
+                                    power=power*2;
+                                }
+                            }
+                        }
+                        else{
+                            parenthash=2*(parenthash - parent[k-1]*power)+parent[patternsize-1+k];
+                        }
+                        if(parenthash == patternhash){
+                            bool finded =true;
+                            for(int n=0;n<patternsize;n++){
+                                if(parent[k+n]!=pattern[n]){
+                                    finded =false;
+                                    break;
+                                }
+                            }
+                            /*
+                            if(finded){
+                                res.push_back(pattern);
+                            }*/
+                            
+                            for (int m = 0; m < 100; m++) {
+                            count[m] = 0;
+                        }
+                             accumulate = 0;
+                        for (int m = 0; m < res.size(); m++) {
+                            
+                             if (pattern == res[m]) {
+                                    count[m] = 1;
+
+                              }
+
+                            accumulate += count[m];
+                        }
+
+                        if (finded) {
+                            if (accumulate == 0) {
+                                res.push_back(pattern);
+                            }
+
+
+                        }
+                        
+                           
+                        }
+                    }
+                }
+                else{
+                    power=1;
+                    parent=words[j];
+                    pattern=words[i];
+                    parentsize=words[j].size();
+                    patternsize=words[i].size();
+                    parenthash = 0;
+                    patternhash = 0;
+                    for(int k=0; k<=parentsize-patternsize;k++){
+                        if(k==0){
+                            for(int q=0; q<patternsize;q++){
+                                parenthash+=parent[patternsize-1-q]*power;
+                                patternhash+=pattern[patternsize-1-q]*power;
+                                if(q<patternsize-1){
+                                    power=power*2;
+                                }
+                            }
+                        }
+                        else{
+                            parenthash=2*(parenthash - parent[k-1]*power)+parent[patternsize-1+k];
+                        }
+                        if(parenthash == patternhash){
+                            bool finded =true;
+                            for(int n=0;n<patternsize;n++){
+                                if(parent[k+n]!=pattern[n]){
+                                    finded =false;
+                                    break;
+                                }
+                            }
+                            
+                            for (int m = 0; m < 100; m++) {
+                            count[m] = 0;
+                        }
+                             accumulate = 0;
+                        for (int m = 0; m < res.size(); m++) {
+                            
+                             if (pattern == res[m]) {
+                                    count[m] = 1;
+
+                              }
+
+                            accumulate += count[m];
+                        }
+
+                        if (finded) {
+                            if (accumulate == 0) {
+                                res.push_back(pattern);
+                            }
+
+
+                        }
+                        /*
+                            if(finded){
+                                res.push_back(pattern);
+                            }*/
+                        }
+                    }
+                }
+            }
+        }
+        return res;
+    }
+};
